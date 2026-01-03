@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Sparkles, Mail, Phone, MapPin, ExternalLink, Download, Play } from "lucide-react";
+import { Mail, Phone, MapPin, ExternalLink, Download, Play } from "lucide-react";
 import { motion } from "framer-motion";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   return (
@@ -10,13 +11,13 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-emerald-glow flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-primary-foreground" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-xl">NEXAURA</span>
-                <span className="text-[10px] text-background/60 -mt-1 tracking-widest">WELLNESS</span>
-              </div>
+              <motion.img
+                src={logo}
+                alt="Nexaura Logo"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                className="h-12 w-auto object-contain"
+              />
             </Link>
             <p className="text-background/70 text-sm leading-relaxed mb-6 max-w-sm">
               Nexaura Wellness Marketing Pvt. Ltd. - India's trusted direct selling & wellness company empowering individuals since 2025.

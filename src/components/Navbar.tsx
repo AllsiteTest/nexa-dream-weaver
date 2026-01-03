@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, Download } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,17 +30,13 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-emerald-glow flex items-center justify-center"
-            >
-              <Sparkles className="w-6 h-6 text-primary-foreground" />
-            </motion.div>
-            <div className="flex flex-col">
-              <span className="font-bold text-xl text-foreground tracking-tight">NEXAURA</span>
-              <span className="text-[10px] text-muted-foreground -mt-1 tracking-widest">WELLNESS</span>
-            </div>
+            <motion.img
+              src={logo}
+              alt="Nexaura Logo"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              className="h-12 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}
