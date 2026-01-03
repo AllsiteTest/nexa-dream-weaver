@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
@@ -43,9 +43,13 @@
     --gradient-gold: linear-gradient(135deg, hsl(45 93% 47%) 0%, hsl(38 90% 50%) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(160 40% 10%) 0%, hsl(160 50% 18%) 50%, hsl(170 45% 22%) 100%);
     --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(150 30% 98%) 100%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsla(160, 84%, 28%, 0.1) 0px, transparent 50%),
+                     radial-gradient(at 80% 0%, hsla(45, 93%, 47%, 0.1) 0px, transparent 50%),
+                     radial-gradient(at 0% 50%, hsla(160, 84%, 35%, 0.1) 0px, transparent 50%);
     --shadow-glow: 0 20px 60px -15px hsla(160, 84%, 28%, 0.3);
     --shadow-gold: 0 20px 60px -15px hsla(45, 93%, 47%, 0.3);
     --shadow-card: 0 10px 40px -10px hsla(160, 40%, 10%, 0.1);
+    --shadow-elevated: 0 25px 50px -12px hsla(160, 40%, 10%, 0.25);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -111,6 +115,10 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .font-display {
     font-family: 'Playfair Display', serif;
   }
 }
@@ -119,6 +127,11 @@
   .glass-card {
     @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl;
     box-shadow: var(--shadow-card);
+  }
+
+  .glass-card-elevated {
+    @apply bg-card/90 backdrop-blur-2xl border border-border/40 rounded-3xl;
+    box-shadow: var(--shadow-elevated);
   }
 
   .gradient-text {
@@ -135,6 +148,10 @@
     background: var(--gradient-hero);
   }
 
+  .mesh-gradient {
+    background: var(--gradient-mesh);
+  }
+
   .glow-primary {
     box-shadow: var(--shadow-glow);
   }
@@ -143,29 +160,8 @@
     box-shadow: var(--shadow-gold);
   }
 
-  .shine-effect {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .shine-effect::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsla(0, 0%, 100%, 0.2),
-      transparent
-    );
-    transition: left 0.5s ease;
-  }
-
-  .shine-effect:hover::before {
-    left: 100%;
+  .text-glow {
+    text-shadow: 0 0 40px hsla(160, 84%, 28%, 0.5);
   }
 
   .animate-float {
@@ -179,6 +175,54 @@
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient 8s ease infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background: linear-gradient(90deg, transparent, hsla(0, 0%, 100%, 0.1), transparent);
+    background-size: 200% 100%;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .card-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsla(0, 0%, 100%, 0.15),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  .card-shine:hover::before {
+    left: 100%;
+  }
+
+  .page-header {
+    @apply pt-32 pb-16 hero-gradient relative overflow-hidden;
+  }
+
+  .section-padding {
+    @apply py-20 md:py-28;
   }
 }
 
@@ -201,4 +245,40 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -30px) scale(1.1);
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  75% {
+    transform: translate(30px, 10px) scale(1.05);
+  }
+}
+
+.animate-blob {
+  animation: blob 10s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
