@@ -1,55 +1,85 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, Download } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Products", href: "#products" },
-    { name: "Business Plan", href: "#plan" },
-    { name: "Rewards", href: "#rewards" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "Products", href: "/products" },
+    { name: "Business Plan", href: "/business-plan" },
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" },
   ];
 
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50"
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-emerald-glow flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-2 group">
+            <motion.div
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-emerald-glow flex items-center justify-center"
+            >
               <Sparkles className="w-6 h-6 text-primary-foreground" />
-            </div>
+            </motion.div>
             <div className="flex flex-col">
-              <span className="font-display text-xl font-bold text-foreground">NEXAURA</span>
-              <span className="text-[10px] text-muted-foreground -mt-1 tracking-wider">WELLNESS</span>
+              <span className="font-bold text-xl text-foreground tracking-tight">NEXAURA</span>
+              <span className="text-[10px] text-muted-foreground -mt-1 tracking-widest">WELLNESS</span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                to={link.href}
+                className={`relative text-sm font-medium transition-colors ${
+                  isActive(link.href) ? "text-primary" : "text-muted-foreground hover:text-primary"
+                }`}
               >
                 {link.name}
-              </a>
+                {isActive(link.href) && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                  />
+                )}
+              </Link>
             ))}
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Button variant="outline" size="sm">
-              Login
-            </Button>
-            <Button variant="hero" size="sm">
-              Join Now
-            </Button>
+          <div className="hidden lg:flex items-center gap-3">
+            <a
+              href="https://play.google.com/store"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" size="sm" className="gap-2">
+                <Download className="w-4 h-4" />
+                Download App
+              </Button>
+            </a>
+            <Link to="/contact">
+              <Button variant="hero" size="sm">
+                Join Now
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -62,32 +92,55 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
-        {isOpen && (
-          <div className="lg:hidden py-4 border-t border-border/50">
-            <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </a>
-              ))}
-              <div className="flex gap-4 pt-4">
-                <Button variant="outline" size="sm" className="flex-1">
-                  Login
-                </Button>
-                <Button variant="hero" size="sm" className="flex-1">
-                  Join Now
-                </Button>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden overflow-hidden"
+            >
+              <div className="py-4 border-t border-border/50">
+                <div className="flex flex-col gap-2">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.name}
+                      to={link.href}
+                      className={`text-sm font-medium py-3 px-4 rounded-lg transition-colors ${
+                        isActive(link.href)
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted"
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                  <div className="flex gap-3 pt-4 px-4">
+                    <a
+                      href="https://play.google.com/store"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1"
+                    >
+                      <Button variant="outline" size="sm" className="w-full gap-2">
+                        <Download className="w-4 h-4" />
+                        App
+                      </Button>
+                    </a>
+                    <Link to="/contact" className="flex-1">
+                      <Button variant="hero" size="sm" className="w-full">
+                        Join Now
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 
